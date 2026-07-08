@@ -1,0 +1,31 @@
+# Python çalışma zamanı artıkları
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Sanal ortam
+.venv/
+venv/
+env/
+
+# Araç önbellekleri
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Üretilen çıktılar (grafikler, raporlar)
+output/
+
+# Geçici Excel/rapor çıktıları — data/ altındaki örnek veriler versiyonlanır
+*.xlsx
+!data/*.xlsx
+
+# IDE / işletim sistemi
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

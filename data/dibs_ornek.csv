@@ -1,0 +1,9 @@
+﻿# TEMSİLİ/ÖRNEK VERİ — gerçek piyasa kotasyonu değildir; 2026-06-30 tarihli seviyelere göre kurgulanmıştır.
+isim,vade_yil,kupon_orani,frekans,ytm,temiz_fiyat
+TRT 6A iskontolu,0.5,0.0,1,0.395,84.6668
+TRT 1Y iskontolu,1.0,0.0,1,0.37,72.9927
+TRT 2Y %32 kuponlu,2.0,0.32,2,0.335,97.9324
+TRT 3Y %30 kuponlu,3.0,0.3,2,0.305,99.0602
+TRT 5Y %26 kuponlu,5.0,0.26,2,0.272,96.8209
+TRT 7Y %24 kuponlu,7.0,0.24,2,0.25,96.769
+TRT 10Y %22 kuponlu,10.0,0.22,2,0.234,94.6715

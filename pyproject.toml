@@ -1,0 +1,67 @@
+[project]
+name = "bond-lab"
+version = "1.0.0"
+description = "Tahvil değerleme, faiz riski analizi ve yatırım stratejisi araç seti (Türkçe)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+keywords = ["tahvil", "bono", "finans", "durasyon", "getiri egrisi", "fixed-income"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Natural Language :: Turkish",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Office/Business :: Financial :: Investment",
+]
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "matplotlib>=3.8",
+    "pandas>=2.1",
+    "requests>=2.31",
+    "openpyxl>=3.1",
+    "streamlit>=1.36",
+]
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311", "py312"]
+extend-exclude = "/(\\.venv|output|data)/"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+extend-exclude = [".venv", "output", "data"]
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle hataları
+    "F",  # pyflakes
+    "W",  # pycodestyle uyarıları
+    "I",  # isort (import sıralaması)
+    "N",  # pep8-naming
+    "UP", # pyupgrade (modern Python sözdizimi)
+    "B",  # flake8-bugbear
+]
+ignore = [
+    "E203", # dilim içindeki boşluk; black ile uyumsuz
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E501"]
+
+[tool.mypy]
+# python_version pinlenmez: numpy 2.x stub'ları 3.12+ sözdizimi kullanır;
+# denetim çalışan yorumlayıcının sürümüyle yapılır.
+ignore_missing_imports = true
+warn_unused_ignores = false
+no_implicit_optional = true
+check_untyped_defs = true
+exclude = "(\\.venv|output|data)/"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
