@@ -183,7 +183,8 @@ tahvil_degerleme/
 ├── main.py                # Türkçe demo + CLI (demo / fiyatla / oner / backtest / rapor / web)
 ├── app.py                 # Streamlit web arayüzü (Türkçe, 5 sekme)
 ├── pyproject.toml         # Proje metadata'sı + ruff/black/mypy/pytest yapılandırması
-├── kalite_kontrol.ps1     # Tek komutla kalite denetimi (format + lint + tip + test)
+├── kalite_kontrol.ps1     # Windows: tek komutla kalite denetimi
+├── kalite_kontrol.sh      # Linux/macOS: aynı kontroller (ruff/mypy/pytest + black)
 ├── requirements.txt
 ├── CHANGELOG.md           # Sürüm geçmişi
 ├── LICENSE                # MIT
@@ -223,12 +224,21 @@ Tüm araç yapılandırmaları `pyproject.toml` içindedir (satır uzunluğu 100
 ruff kural setleri E/F/W/I/N/UP/B, mypy `check_untyped_defs`). Tek komutla
 tam denetim:
 
-```powershell
-# Denetim modu: black --check + ruff check + mypy + pytest
-.\kalite_kontrol.ps1
+> **Not:** `kalite_kontrol.ps1` Windows'a özeldir. Linux/macOS için
+> `./kalite_kontrol.sh` kullanın. CI (GitHub Actions) Linux'ta aynı kontrolleri
+> (`pytest` + `ruff` + `mypy`) çalıştırır — üstteki CI rozetine bakın.
 
-# Düzeltme modu: black ve ruff otomatik düzeltmeleri de uygular
+```powershell
+# Windows — denetim / düzeltme
+.\kalite_kontrol.ps1
 .\kalite_kontrol.ps1 -Duzelt
+```
+
+```bash
+# Linux / macOS — denetim / düzeltme
+chmod +x kalite_kontrol.sh   # bir kez
+./kalite_kontrol.sh
+./kalite_kontrol.sh --duzelt
 ```
 
 Araçları tek tek çalıştırmak için:
@@ -238,8 +248,6 @@ python -m pytest tests/ -v     # birim testleri
 python -m ruff check .         # lint
 python -m mypy bond_lab        # statik tip denetimi
 ```
-
-CI: GitHub Actions (`pytest` + `ruff` + `mypy`) her push/PR'da çalışır — üstteki CI rozetine bakın.
 
 Testler kapalı form finansal sonuçlarla karşılaştırır (par tahvil = nominal,
 sıfır kuponlu durasyon = vade, YTM/Z-spread gidiş-dönüş, sonlu fark ile
