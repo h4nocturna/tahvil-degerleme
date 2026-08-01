@@ -3,8 +3,8 @@
 ![Sürüm](https://img.shields.io/badge/s%C3%BCr%C3%BCm-1.0.0-blue)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Lisans](https://img.shields.io/badge/lisans-MIT-green)
-![Testler](https://img.shields.io/badge/testler-148%20ge%C3%A7ti-brightgreen)
-![Kod stili](https://img.shields.io/badge/kod%20stili-black%20%7C%20ruff%20%7C%20mypy-black)
+![CI](https://github.com/h4nocturna/tahvil-degerleme/actions/workflows/ci.yml/badge.svg)
+![Kod stili](https://img.shields.io/badge/kod%20stili-ruff%20%7C%20mypy-black)
 
 Python ile yazılmış, **tahvil (bono) değerleme** ve **yatırım stratejisi belirleme** aracı.
 Sabit kuponlu ve sıfır kuponlu tahvilleri fiyatlar; getiri, durasyon, konveksite gibi
@@ -17,7 +17,11 @@ konvansiyonları** (ACT/365F, ACT/360, 30/360, ACT/ACT), **canlı FRED verisi**
 (ABD Hazine eğrisi; internet yoksa temsili veriye düşer), **kredi spread'i /
 Z-spread**, **enflasyona endeksli tahvil** (TÜFE'ye endeksli DİBS benzeri, Fisher
 denklemi), **strateji backtest motoru** (deterministik patikalar + Vasicek
-simülasyonu), **Excel/CSV raporlama** ve **Streamlit web arayüzü** içerir.
+simülasyonu), **Excel/CSV raporlama**, **Streamlit web arayüzü** ve isteğe bağlı
+**FastAPI** REST katmanı içerir.
+
+> **Ekip:** İki kişilik ekip; public commit geçmişi şu an tek hesap
+> ([h4nocturna](https://github.com/h4nocturna)) üzerinden görünür.
 
 ## İçindekiler
 
@@ -37,48 +41,57 @@ simülasyonu), **Excel/CSV raporlama** ve **Streamlit web arayüzü** içerir.
 
 ## Kurulum
 
-```powershell
-cd C:\tahvil_degerleme
+```bash
+git clone https://github.com/h4nocturna/tahvil-degerleme.git
+cd tahvil-degerleme
 
-# Sanal ortam oluştur
-py -m venv .venv
+python -m venv .venv
 
-# Bağımlılıkları kur (activate gerekmez; doğrudan venv python'u kullanılır)
+# Windows
 .venv\Scripts\python.exe -m pip install -r requirements.txt
+
+# macOS / Linux
+# .venv/bin/python -m pip install -r requirements.txt
 ```
+
+Aşağıdaki komutlarda `python` yerine sanal ortam yorumlayıcısını kullanın
+(Windows: `.venv\Scripts\python.exe`, Unix: `.venv/bin/python`).
 
 ## Kullanım
 
-```powershell
+```bash
 # Uçtan uca tam demo: fiyatlama, risk, eğri, stratejiler, senaryolar,
 # öneri motoru, backtest özeti, Excel raporu ve output/ klasörüne PNG grafikler
-.venv\Scripts\python.exe main.py
+python main.py
 
 # Tek tahvil fiyatlama (%10 kuponlu, 5 yıl vadeli, %12 getiriyle)
-.venv\Scripts\python.exe main.py fiyatla --kupon 0.10 --vade 5 --ytm 0.12
+python main.py fiyatla --kupon 0.10 --vade 5 --ytm 0.12
 
 # 6 aylık kuponlu örnek
-.venv\Scripts\python.exe main.py fiyatla --kupon 0.12 --vade 7 --ytm 0.11 --frekans 2
+python main.py fiyatla --kupon 0.12 --vade 7 --ytm 0.11 --frekans 2
 
 # Profilinize göre strateji önerisi
-.venv\Scripts\python.exe main.py oner --beklenti dusecek --ufuk 5 --risk orta
+python main.py oner --beklenti dusecek --ufuk 5 --risk orta
 
 # Strateji backtest'i (deterministik patikalar + Vasicek simülasyonu)
-.venv\Scripts\python.exe main.py backtest --ufuk 3 --patika 200
+python main.py backtest --ufuk 3 --patika 200
 
 # Excel + CSV raporu üret (output/ klasörüne)
-.venv\Scripts\python.exe main.py rapor
+python main.py rapor
 
 # Streamlit web arayüzünü başlat (alternatif: main.py web)
-.venv\Scripts\python.exe -m streamlit run app.py
+python -m streamlit run app.py
+
+# İsteğe bağlı REST API (Swagger: http://localhost:8000/docs)
+python -m uvicorn api.main:app --reload --port 8000
 
 # Testler
-.venv\Scripts\python.exe -m pytest tests/ -v
+python -m pytest tests/ -v
 ```
 
 ## Web Arayüzü (Streamlit)
 
-`.venv\Scripts\python.exe -m streamlit run app.py` komutu tarayıcıda Türkçe,
+`python -m streamlit run app.py` komutu tarayıcıda Türkçe,
 sekmeli bir arayüz açar (varsayılan adres `http://localhost:8501`):
 
 1. **Tahvil Fiyatlama** — nominal/kupon/frekans/vade girin; YTM'den fiyat veya
@@ -162,7 +175,8 @@ tahvil_degerleme/
 │   ├── inflation.py       # Enflasyona endeksli tahvil, Fisher denklemi
 │   ├── backtest.py        # Deterministik patikalar + Vasicek simülasyonu, strateji backtest'i
 │   └── report.py          # Excel (çok sayfalı) + CSV raporlama
-├── tests/                 # pytest testleri (çekirdek + genişletme, 148 test)
+├── tests/                 # pytest testleri (çekirdek + genişletme; CI'da koşar)
+├── api/                   # FastAPI REST katmanı (isteğe bağlı)
 ├── data/                  # Örnek veri CSV'leri (dibs_ornek.csv, ust_egri_ornek.csv)
 ├── docs/
 │   └── MIMARI.md          # Modül mimarisi, veri akışı, tasarım kararları
@@ -219,12 +233,13 @@ tam denetim:
 
 Araçları tek tek çalıştırmak için:
 
-```powershell
-.venv\Scripts\python.exe -m pytest tests/ -v     # 148 birim testi
-.venv\Scripts\python.exe -m ruff check .         # lint
-.venv\Scripts\python.exe -m black --check .      # format denetimi
-.venv\Scripts\python.exe -m mypy bond_lab        # statik tip denetimi
+```bash
+python -m pytest tests/ -v     # birim testleri
+python -m ruff check .         # lint
+python -m mypy bond_lab        # statik tip denetimi
 ```
+
+CI: GitHub Actions (`pytest` + `ruff` + `mypy`) her push/PR'da çalışır — üstteki CI rozetine bakın.
 
 Testler kapalı form finansal sonuçlarla karşılaştırır (par tahvil = nominal,
 sıfır kuponlu durasyon = vade, YTM/Z-spread gidiş-dönüş, sonlu fark ile

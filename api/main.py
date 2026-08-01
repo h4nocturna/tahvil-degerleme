@@ -1,7 +1,7 @@
-"""Tahvil Laboratuvarı REST API — bond_lab motorunu Lovable frontend'e bağlar.
+"""Tahvil Laboratuvarı REST API — bond_lab motorunu yerel frontend'e bağlar.
 
 Çalıştırma:
-    .venv\\Scripts\\python.exe -m uvicorn api.main:app --reload --port 8000
+    python -m uvicorn api.main:app --reload --port 8000
 
 Swagger: http://localhost:8000/docs
 """
@@ -39,11 +39,9 @@ app.add_middleware(
         "http://localhost:5173",
         "http://localhost:3000",
         "http://127.0.0.1:5173",
-        "https://lovable.dev",
-        "https://*.lovable.app",
-        "https://*.lovableproject.com",
+        "http://127.0.0.1:3000",
+        "http://localhost:8501",
     ],
-    allow_origin_regex=r"https://.*\.(lovable\.app|lovableproject\.com)",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -117,7 +115,10 @@ def fiyatla(girdi: TahvilGirdi) -> FiyatlamaYanit:
             ytm = girdi.ytm
         else:
             if girdi.temiz_fiyat is None:
-                raise HTTPException(status_code=422, detail="Temiz fiyat gerekli (mod=fiyattan_ytm).")
+                raise HTTPException(
+                    status_code=422,
+                    detail="Temiz fiyat gerekli (mod=fiyattan_ytm).",
+                )
             ytm = ytm_bul(tahvil, girdi.temiz_fiyat, temiz=True)
 
         kirli = kirli_fiyat(tahvil, ytm)
