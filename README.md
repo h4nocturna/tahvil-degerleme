@@ -3,7 +3,7 @@
 ![Sürüm](https://img.shields.io/badge/s%C3%BCr%C3%BCm-1.0.0-blue)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Lisans](https://img.shields.io/badge/lisans-MIT-green)
-![CI](https://github.com/h4nocturna/tahvil-degerleme/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/mustafayuksel00/tahvil-degerleme/actions/workflows/ci.yml/badge.svg)
 ![Kod stili](https://img.shields.io/badge/kod%20stili-ruff%20%7C%20mypy-black)
 
 Python ile yazılmış, **tahvil (bono) değerleme** ve **yatırım stratejisi belirleme** aracı.
@@ -21,7 +21,7 @@ simülasyonu), **Excel/CSV raporlama**, **Streamlit web arayüzü** ve isteğe b
 **FastAPI** REST katmanı içerir.
 
 > **Ekip:** İki kişilik ekip; public commit geçmişi şu an tek hesap
-> ([h4nocturna](https://github.com/h4nocturna)) üzerinden görünür.
+> ([mustafayuksel00](https://github.com/mustafayuksel00)) üzerinden görünür.
 
 ## İçindekiler
 
@@ -42,7 +42,7 @@ simülasyonu), **Excel/CSV raporlama**, **Streamlit web arayüzü** ve isteğe b
 ## Kurulum
 
 ```bash
-git clone https://github.com/h4nocturna/tahvil-degerleme.git
+git clone https://github.com/mustafayuksel00/tahvil-degerleme.git
 cd tahvil-degerleme
 
 python -m venv .venv
